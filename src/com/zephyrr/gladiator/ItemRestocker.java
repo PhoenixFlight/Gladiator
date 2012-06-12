@@ -3,6 +3,7 @@ package com.zephyrr.gladiator;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -47,20 +48,23 @@ public class ItemRestocker implements Listener {
             event.getPlayer().getInventory().addItem(items.get(i).clone());
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void restockItems(PlayerRespawnEvent event) {
         //if(SpawnHandler.getFirstPlayer() != null)
             //SpawnHandler.getFirstPlayer().getInventory().clear();
         //event.getPlayer().getKiller().getInventory().clear();
         //for(int i = 0; i < items.size(); i++)
             //event.getPlayer().getKiller().getInventory().addItem(items.get(i).clone());
-        SpawnHandler.getFirstPlayer().getInventory().clear();
-        for(int i = 0; i < items.size(); i++)
-            SpawnHandler.getFirstPlayer().getInventory().addItem(items.get(i).clone());
-        if(SpawnHandler.getSecondPlayer() != null) {
-            SpawnHandler.getSecondPlayer().getInventory().clear();
-            for(int i = 0; i < items.size(); i++)
-                SpawnHandler.getSecondPlayer().getInventory().addItem(items.get(i).clone());
+        for(Player p : event.getPlayer().getWorld().getPlayers()) {
+            p.getInventory().clear();
+            for(ItemStack s : ItemRestocker.getItems())
+                p.getInventory().addItem(s.clone());
+            p.setHealth(p.getMaxHealth());
+            p.setFoodLevel(20);
         }
+        event.getPlayer().getInventory().clear();
+        for(ItemStack s : items)
+            event.getPlayer().getInventory().addItem(s.clone());
+        
     }
 }

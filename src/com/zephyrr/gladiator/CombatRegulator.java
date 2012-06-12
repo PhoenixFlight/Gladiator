@@ -133,10 +133,13 @@ public class CombatRegulator implements Listener {
             }
         }
         event.getDrops().clear();
-        SpawnHandler.getFirstPlayer().setHealth(SpawnHandler.getFirstPlayer().getMaxHealth());
-        SpawnHandler.getFirstPlayer().setFoodLevel(20);
-        SpawnHandler.getFirstPlayer().getInventory().clear();
-        //event.getEntity().getKiller().teleport(SpawnPoint.getRandomPoint());
+        for(Player p : event.getEntity().getWorld().getPlayers()) {
+            p.getInventory().clear();
+            for(ItemStack s : ItemRestocker.getItems())
+                p.getInventory().addItem(s.clone());
+            p.setHealth(p.getMaxHealth());
+            p.setFoodLevel(20);
+        }
         isGameTime = false;
         event.getEntity().getServer().getScheduler().scheduleAsyncRepeatingTask(Gladiator.getPlugin(), new Runnable() {
 
