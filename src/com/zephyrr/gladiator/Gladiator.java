@@ -134,6 +134,7 @@ public class Gladiator extends JavaPlugin {
                          loc.getY() +
                          loc.getZ());
                 saveConfig();
+                return true;
             }
         }
         return false;

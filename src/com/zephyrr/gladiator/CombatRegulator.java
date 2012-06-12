@@ -63,32 +63,38 @@ public class CombatRegulator implements Listener {
             }
         }
     }
+
     @EventHandler
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
-        if(!isGameTime) {
+        if (!isGameTime) {
             event.setCancelled(true);
             return;
         }
-        if(!(event.getEntity() instanceof Player))
+        if (!(event.getEntity() instanceof Player)) {
             return;
-        if(event.getDamager().getType() == EntityType.ARROW) {
-            Arrow a = (Arrow)event.getDamager();
-            if(a.getShooter() != SpawnHandler.getFirstPlayer() && a.getShooter() != SpawnHandler.getSecondPlayer())
+        }
+        if (event.getDamager().getType() == EntityType.ARROW) {
+            Arrow a = (Arrow) event.getDamager();
+            if (a.getShooter() != SpawnHandler.getFirstPlayer() && a.getShooter() != SpawnHandler.getSecondPlayer()) {
                 event.setCancelled(true);
+            }
         }
-        Player hit = (Player)event.getEntity();
+        Player hit = (Player) event.getEntity();
         Entity hitter = event.getDamager();
-        if(!(hit.equals(SpawnHandler.getFirstPlayer()) || hit.equals(SpawnHandler.getSecondPlayer())))
+        if (!(hit.equals(SpawnHandler.getFirstPlayer()) || hit.equals(SpawnHandler.getSecondPlayer()))) {
             event.setCancelled(true);
-        if(hitter instanceof Player && !(hitter.equals(SpawnHandler.getFirstPlayer()) || hitter.equals(SpawnHandler.getSecondPlayer())))
+        }
+        if (hitter instanceof Player && !(hitter.equals(SpawnHandler.getFirstPlayer()) || hitter.equals(SpawnHandler.getSecondPlayer()))) {
             event.setCancelled(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerDeath(final PlayerDeathEvent event) {
         if (SpawnHandler.getSecondPlayer() == null) {
-            if(SpawnHandler.getFirstPlayer() != null)
+            if (SpawnHandler.getFirstPlayer() != null) {
                 SpawnHandler.getFirstPlayer().teleport(SpawnPoint.getRandomPoint());
+            }
             try {
                 ArrayList<String> lines = new ArrayList<String>();
                 int score = -1;
@@ -120,8 +126,9 @@ public class CombatRegulator implements Listener {
                 for (World w : event.getEntity().getServer().getWorlds()) {
                     for (Player p : w.getPlayers()) {
                         p.getInventory().clear();
-                        for(ItemStack s : ItemRestocker.getItems())
+                        for (ItemStack s : ItemRestocker.getItems()) {
                             p.getInventory().addItem(s.clone());
+                        }
                         SpawnHandler.addPlayer(p);
                         p.teleport(SpawnPoint.getRandomPoint());
                     }
@@ -133,10 +140,11 @@ public class CombatRegulator implements Listener {
             }
         }
         event.getDrops().clear();
-        for(Player p : event.getEntity().getWorld().getPlayers()) {
+        for (Player p : event.getEntity().getWorld().getPlayers()) {
             p.getInventory().clear();
-            for(ItemStack s : ItemRestocker.getItems())
+            for (ItemStack s : ItemRestocker.getItems()) {
                 p.getInventory().addItem(s.clone());
+            }
             p.setHealth(p.getMaxHealth());
             p.setFoodLevel(20);
         }
@@ -146,16 +154,32 @@ public class CombatRegulator implements Listener {
             private int ticks = 10;
 
             public void run() {
-                if(SpawnHandler.playerCount() < Gladiator.getPlugin().getConfig().getInt("minPlayers")) {
+                if (SpawnHandler.playerCount() < Gladiator.getPlugin().getConfig().getInt("minPlayers")) {
                     ticks = 10;
                     return;
                 }
-                if(ticks > 0) {
+                if (ticks > 0) {
                     Gladiator.getPlugin().getServer().broadcastMessage(ChatColor.GREEN + "" + ticks + " seconds until the first match begins!");
-                } else Gladiator.getPlugin().getServer().getScheduler().cancelTasks(Gladiator.getPlugin());
-                if(ticks == 0) {
+                } else {
+                    Gladiator.getPlugin().getServer().getScheduler().cancelTasks(Gladiator.getPlugin());
+                }
+                if (ticks == 0) {
                     Gladiator.getPlugin().getServer().broadcastMessage(ChatColor.GREEN + SpawnHandler.getFirstPlayer().getDisplayName() + " and " + SpawnHandler.getSecondPlayer().getDisplayName() + ", begin!");
                     CombatRegulator.setActive(true);
+                    Player p = SpawnHandler.getFirstPlayer();
+                    p.getInventory().clear();
+                    for (ItemStack s : ItemRestocker.getItems()) {
+                        p.getInventory().addItem(s.clone());
+                    }
+                    p.setHealth(p.getMaxHealth());
+                    p.setFoodLevel(20);
+                    p = SpawnHandler.getSecondPlayer();
+                    p.getInventory().clear();
+                    for (ItemStack s : ItemRestocker.getItems()) {
+                        p.getInventory().addItem(s.clone());
+                    }
+                    p.setHealth(p.getMaxHealth());
+                    p.setFoodLevel(20);
                 }
                 ticks--;
             }
