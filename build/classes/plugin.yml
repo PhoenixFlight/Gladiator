@@ -1,0 +1,24 @@
+name: Gladiator
+main: com.zephyrr.gladiator.Gladiator
+version: 1.14
+commands:
+  addSpawn:
+    description: Adds the point where you are currently standing to the list of spawn points.
+    usage: /addSpawn
+    permission: gladiator.addspawn
+    permission-message: You don't have permission to do that.
+  remSpawn:
+    description: Removes the spawn point at the specified index.
+    usage: /remSpawn <index>
+    permission: gladiator.remspawn
+    permission-message: You don't have permission to do that.
+  listPoints:
+    description: Lists all valid spawn points and their index values.
+    usage: /listPoints
+    permission: gladiator.listpoints
+    permission-message: You don't have permission to do that.
+  getLinePlace:
+    description: Returns your place in line.
+    usage: /getLinePlace
+    permission: gladiator.placeinline
+    permission-message: You don't have permission to do that.
