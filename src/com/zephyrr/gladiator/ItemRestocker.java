@@ -49,7 +49,7 @@ public class ItemRestocker implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void restockItems(PlayerRespawnEvent event) {
+    public void restockItems(final PlayerRespawnEvent event) {
         //if(SpawnHandler.getFirstPlayer() != null)
             //SpawnHandler.getFirstPlayer().getInventory().clear();
         //event.getPlayer().getKiller().getInventory().clear();
@@ -62,9 +62,13 @@ public class ItemRestocker implements Listener {
             p.setHealth(p.getMaxHealth());
             p.setFoodLevel(20);
         }
-        event.getPlayer().getInventory().clear();
-        for(ItemStack s : items)
-            event.getPlayer().getInventory().addItem(s.clone());
-        
+        event.getPlayer().getServer().getScheduler().scheduleAsyncDelayedTask(Gladiator.getPlugin(), new Runnable() {
+            public void run() {
+                event.getPlayer().getInventory().clear();
+                for(ItemStack s : items)
+                    event.getPlayer().getInventory().addItem(s.clone());
+
+                    }
+        }, 100L);
     }
 }
