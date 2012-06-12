@@ -16,49 +16,71 @@ import org.bukkit.event.player.PlayerRespawnEvent;
  * @author Phoenix
  */
 public class SpawnHandler implements Listener {
+
     private static ArrayList<Player> playerOrder;
+
     static {
         playerOrder = new ArrayList<Player>();
     }
+
     public static Player getFirstPlayer() {
-        if(playerOrder.size() >= 1)
+        if (playerOrder.size() >= 1) {
             return playerOrder.get(0);
+        }
         return null;
     }
+
     public static Player getSecondPlayer() {
-        if(playerOrder.size() >= 2)
+        if (playerOrder.size() >= 2) {
             return playerOrder.get(1);
+        }
         return null;
     }
+
     public static int findPlayer(Player p) {
         return playerOrder.indexOf(p);
     }
+
     public static int playerCount() {
         return playerOrder.size();
     }
+
     public static void addPlayer(Player p) {
         playerOrder.add(p);
     }
+
     public static void removePlayer(Player p) {
         playerOrder.remove(p);
     }
+
     @EventHandler
     public void onPlayerLogin(final PlayerLoginEvent event) {
         playerOrder.add(event.getPlayer());
-        if(SpawnPoint.getRandomPoint() != null) {
+        if (SpawnPoint.getRandomPoint() != null) {
             event.getPlayer().getServer().getScheduler().scheduleAsyncDelayedTask(Gladiator.getPlugin(), new Runnable() {
+
                 public void run() {
                     event.getPlayer().teleport(SpawnPoint.getRandomPoint());
                 }
             }, 100L);
         }
     }
+
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         playerOrder.remove(event.getPlayer());
     }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerDeath(PlayerDeathEvent event) {
+        Location loc;
+        String data = event.getEntity().getServer().getPluginManager().getPlugin("Gladiator").getConfig().getString("respawnLocation");
+        if (data.equalsIgnoreCase("NULL")) {
+            loc = SpawnPoint.getRandomPoint();
+        } else {
+            loc = new Location(event.getEntity().getServer().getWorld(data.split(",")[0]), Double.parseDouble(data.split(",")[1]), Double.parseDouble(data.split(",")[2]), Double.parseDouble(data.split(",")[3]));
+        }
+        event.getEntity().teleport(loc);
         playerOrder.remove(event.getEntity());
         //playerOrder.add(event.getEntity());
     }
@@ -67,13 +89,10 @@ public class SpawnHandler implements Listener {
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         Location loc;
         String data = event.getPlayer().getServer().getPluginManager().getPlugin("Gladiator").getConfig().getString("respawnLocation");
-        if(data.equalsIgnoreCase("NULL"))
+        if (data.equalsIgnoreCase("NULL")) {
             loc = SpawnPoint.getRandomPoint();
-        else {
-            loc = new Location(event.getPlayer().getServer().getWorld(data.split(",")[0])
-                    , Double.parseDouble(data.split(",")[1])
-                    , Double.parseDouble(data.split(",")[2])
-                    , Double.parseDouble(data.split(",")[3]));
+        } else {
+            loc = new Location(event.getPlayer().getServer().getWorld(data.split(",")[0]), Double.parseDouble(data.split(",")[1]), Double.parseDouble(data.split(",")[2]), Double.parseDouble(data.split(",")[3]));
         }
         event.setRespawnLocation(loc);
     }
