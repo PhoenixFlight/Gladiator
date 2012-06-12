@@ -22,3 +22,13 @@ commands:
     usage: /getLinePlace
     permission: gladiator.placeinline
     permission-message: You don't have permission to do that.
+  checkRecord:
+    description: Checks how many times a player has won.
+    usage: /checkRecord [player]
+    permission: gladiator.checkrecord
+    permission-message: You don't have permission to do that.
+  setSpecPoint:
+    description: Sets the point where spectators will spawn to where you are standing
+    usage: /setSpecPoint
+    permission: gladiator.setspecpoint
+    permission-message: You don't have permission to do that.

@@ -2,7 +2,9 @@ package com.zephyrr.gladiator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Scanner;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -77,6 +79,62 @@ public class Gladiator extends JavaPlugin {
                 sender.sendMessage(ChatColor.GREEN + "Your space in line is #" + (SpawnHandler.findPlayer((Player)sender)+1) + " of " + SpawnHandler.playerCount() + ".");
             } else sender.sendMessage(ChatColor.RED + "You must be a player to use this comamnd.");
             return true;
+        } else if(command.getName().equalsIgnoreCase("checkRecord")) {
+            if(args.length == 0) {
+                if(!(sender instanceof Player)) {
+                    sender.sendMessage(ChatColor.RED + "You must be a player to use this command.");
+                    return true;
+                }
+                try {
+                    Scanner s = new Scanner(new File("plugins/Gladiator/records.txt"));
+                    String name = ((Player)(sender)).getDisplayName();
+                    int score = -1;
+                    while(s.hasNext()) {
+                        String check = s.nextLine();
+                        if(check.split(" ")[0].equals(name)) {
+                            score = Integer.parseInt(check.split(" ")[1]);
+                            break;
+                        }
+                    }
+                    s.close();
+                    if(score == -1)
+                        score = 0;
+                    sender.sendMessage(ChatColor.GREEN + "You have won " + score + " time(s)");
+                    return true;
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                String name = args[0];
+                try {
+                    Scanner s = new Scanner(new File("plugins/Gladiator/records.txt"));
+                    int score = -1;
+                    while(s.hasNext()) {
+                        String check = s.nextLine();
+                        if(check.split(" ")[0].equals(name)) {
+                            score = Integer.parseInt(check.split(" ")[1]);
+                            break;
+                        }
+                    }
+                    s.close();
+                    if(score == -1)
+                        score = 0;
+                    sender.sendMessage(ChatColor.GREEN + name + " has won " + score + " time(s)");
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
+                return true;
+            }
+        } else if(command.getName().equalsIgnoreCase("setspecpoint")) {
+            if(sender instanceof Player) {
+                Location loc = ((Player)sender).getLocation();
+                getConfig().set("respawnLocation"
+                       , loc.getWorld().getName() +
+                         loc.getX() +
+                         loc.getY() +
+                         loc.getZ());
+                saveConfig();
+            }
         }
         return false;
     }

@@ -66,7 +66,15 @@ public class SpawnHandler implements Listener {
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         Location loc;
-        loc = SpawnPoint.getRandomPoint();
+        String data = event.getPlayer().getServer().getPluginManager().getPlugin("Gladiator").getConfig().getString("respawnLocation");
+        if(data.equalsIgnoreCase("NULL"))
+            loc = SpawnPoint.getRandomPoint();
+        else {
+            loc = new Location(event.getPlayer().getServer().getWorld(data.split(",")[0])
+                    , Double.parseDouble(data.split(",")[1])
+                    , Double.parseDouble(data.split(",")[2])
+                    , Double.parseDouble(data.split(",")[3]));
+        }
         event.setRespawnLocation(loc);
     }
 }

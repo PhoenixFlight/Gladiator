@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -61,37 +64,46 @@ public class CombatRegulator implements Listener {
     }
     @EventHandler
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
+        if(!isGameTime) {
+            event.setCancelled(true);
+            return;
+        }
         if(!(event.getEntity() instanceof Player))
             return;
-        if(!(event.getDamager() instanceof Player))
-            return;
+        if(event.getDamager().getType() == EntityType.ARROW) {
+            Arrow a = (Arrow)event.getDamager();
+            if(a.getShooter() != SpawnHandler.getFirstPlayer() && a.getShooter() != SpawnHandler.getSecondPlayer())
+                event.setCancelled(true);
+        }
         Player hit = (Player)event.getEntity();
-        Player hitter = (Player)event.getDamager();
+        Entity hitter = event.getDamager();
         if(!(hit.equals(SpawnHandler.getFirstPlayer()) || hit.equals(SpawnHandler.getSecondPlayer())))
             event.setCancelled(true);
-        if(!(hitter.equals(SpawnHandler.getFirstPlayer()) || hitter.equals(SpawnHandler.getSecondPlayer())))
+        if(hitter instanceof Player && !(hitter.equals(SpawnHandler.getFirstPlayer()) || hitter.equals(SpawnHandler.getSecondPlayer())))
             event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerDeath(final PlayerDeathEvent event) {
         if (SpawnHandler.getSecondPlayer() == null) {
+            if(SpawnHandler.getFirstPlayer() != null)
+                SpawnHandler.getFirstPlayer().teleport(SpawnPoint.getRandomPoint());
             try {
                 ArrayList<String> lines = new ArrayList<String>();
                 int score = -1;
                 String check;
                 Scanner in = new Scanner(new File("plugins/Gladiator/records.txt"));
                 while (in.hasNext()) {
-                    if ((check = in.nextLine()).split(" ")[0].equals(event.getEntity().getKiller().getDisplayName())) {
+                    if ((check = in.nextLine()).split(" ")[0].equals(SpawnHandler.getFirstPlayer().getDisplayName())) {
                         score = Integer.parseInt(check.split(" ")[1]);
-                        lines.add(event.getEntity().getKiller().getDisplayName() + " " + (score + 1));
+                        lines.add(SpawnHandler.getFirstPlayer().getDisplayName() + " " + (score + 1));
                     } else {
                         lines.add(check);
                     }
                 }
                 if (score == -1) {
                     score = 0;
-                    lines.add(event.getEntity().getKiller().getDisplayName() + " 1");
+                    lines.add(SpawnHandler.getFirstPlayer().getDisplayName() + " 1");
                 }
                 score++;
                 in.close();
@@ -102,11 +114,12 @@ public class CombatRegulator implements Listener {
                 }
                 out.close();
                 fos.close();
-                event.getEntity().getServer().broadcastMessage(ChatColor.GREEN + event.getEntity().getKiller().getDisplayName() + " has won " + score + " time(s)");
-                SpawnHandler.removePlayer(event.getEntity().getKiller());
+                event.getEntity().getServer().broadcastMessage(ChatColor.GREEN + SpawnHandler.getFirstPlayer().getDisplayName() + " has won " + score + " time(s)");
+                SpawnHandler.removePlayer(SpawnHandler.getFirstPlayer());
                 for (World w : event.getEntity().getServer().getWorlds()) {
                     for (Player p : w.getPlayers()) {
                         SpawnHandler.addPlayer(p);
+                        p.teleport(SpawnPoint.getRandomPoint());
                     }
                 }
 
@@ -116,10 +129,10 @@ public class CombatRegulator implements Listener {
             }
         }
         event.getDrops().clear();
-        event.getEntity().getKiller().setHealth(event.getEntity().getKiller().getMaxHealth());
-        event.getEntity().getKiller().setFoodLevel(20);
-        event.getEntity().getKiller().getInventory().clear();
-        event.getEntity().getKiller().teleport(SpawnPoint.getRandomPoint());
+        SpawnHandler.getFirstPlayer().setHealth(SpawnHandler.getFirstPlayer().getMaxHealth());
+        SpawnHandler.getFirstPlayer().setFoodLevel(20);
+        SpawnHandler.getFirstPlayer().getInventory().clear();
+        //event.getEntity().getKiller().teleport(SpawnPoint.getRandomPoint());
         isGameTime = false;
         event.getEntity().getServer().getScheduler().scheduleAsyncRepeatingTask(Gladiator.getPlugin(), new Runnable() {
 

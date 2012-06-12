@@ -46,9 +46,11 @@ public class ItemRestocker implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void restockItems(PlayerRespawnEvent event) {
-        event.getPlayer().getKiller().getInventory().clear();
-        for(int i = 0; i < items.size(); i++)
-            event.getPlayer().getKiller().getInventory().addItem(items.get(i).clone());
+        //if(SpawnHandler.getFirstPlayer() != null)
+            //SpawnHandler.getFirstPlayer().getInventory().clear();
+        //event.getPlayer().getKiller().getInventory().clear();
+        //for(int i = 0; i < items.size(); i++)
+            //event.getPlayer().getKiller().getInventory().addItem(items.get(i).clone());
         SpawnHandler.getFirstPlayer().getInventory().clear();
         for(int i = 0; i < items.size(); i++)
             SpawnHandler.getFirstPlayer().getInventory().addItem(items.get(i).clone());
