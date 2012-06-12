@@ -20,6 +20,9 @@ public class ItemRestocker implements Listener {
         items = new ArrayList<ItemStack>();
         fill();
     }
+    public static ArrayList<ItemStack> getItems() {
+        return items;
+    }
     private static void fill() {
         try {
             if(!new File("plugins/Gladiator/itemList.txt").exists())

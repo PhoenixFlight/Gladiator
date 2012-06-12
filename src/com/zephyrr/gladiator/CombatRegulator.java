@@ -19,6 +19,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 /**
  *
@@ -118,6 +119,9 @@ public class CombatRegulator implements Listener {
                 SpawnHandler.removePlayer(SpawnHandler.getFirstPlayer());
                 for (World w : event.getEntity().getServer().getWorlds()) {
                     for (Player p : w.getPlayers()) {
+                        p.getInventory().clear();
+                        for(ItemStack s : ItemRestocker.getItems())
+                            p.getInventory().addItem(s.clone());
                         SpawnHandler.addPlayer(p);
                         p.teleport(SpawnPoint.getRandomPoint());
                     }
