@@ -32,3 +32,8 @@ commands:
     usage: /setSpecPoint
     permission: gladiator.setspecpoint
     permission-message: You don't have permission to do that.
+  getSpecPoint:
+    description: Returns the point where spectators will spawn
+    usage: /getSpecPoint
+    permission: gladiator.getspecpoint
+    permission-message: You don't have permission to do this.

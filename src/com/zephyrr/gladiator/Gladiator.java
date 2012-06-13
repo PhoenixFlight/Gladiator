@@ -136,6 +136,9 @@ public class Gladiator extends JavaPlugin {
                 saveConfig();
                 return true;
             }
+        } else if(command.getName().equalsIgnoreCase("getspecpoint")) {
+            sender.sendMessage(getConfig().getString("respawnLocation"));
+            return true;
         }
         return false;
     }

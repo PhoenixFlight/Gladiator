@@ -74,8 +74,8 @@ public class SpawnHandler implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerDeath(PlayerDeathEvent event) {
         Location loc;
-        String data = event.getEntity().getServer().getPluginManager().getPlugin("Gladiator").getConfig().getString("respawnLocation");
-        if (data.equalsIgnoreCase("NULL")) {
+        String data = Gladiator.getPlugin().getConfig().getString("respawnLocation");
+        if (data.equalsIgnoreCase("rien")) {
             loc = SpawnPoint.getRandomPoint();
         } else {
             loc = new Location(event.getEntity().getServer().getWorld(data.split(",")[0]), Double.parseDouble(data.split(",")[1]), Double.parseDouble(data.split(",")[2]), Double.parseDouble(data.split(",")[3]));
