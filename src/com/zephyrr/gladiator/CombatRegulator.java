@@ -56,6 +56,8 @@ public class CombatRegulator implements Listener {
         if (SpawnHandler.playerCount() == 1 && SpawnHandler.getFirstPlayer().isOp()) {
             return;
         }
+        if(SpawnHandler.findPlayer(event.getPlayer()) == -1)
+            return;
         if (!isGameTime || SpawnHandler.playerCount() < Gladiator.getPlugin().getConfig().getInt("minPlayers") || (event.getPlayer() != SpawnHandler.getFirstPlayer() && event.getPlayer() != SpawnHandler.getSecondPlayer())) {
             if (event.getFrom().getBlock().getLocation().getBlockX() != event.getTo().getBlock().getLocation().getBlockX()
                     || event.getFrom().getBlock().getLocation().getBlockZ() != event.getTo().getBlock().getLocation().getBlockZ()) {
