@@ -94,9 +94,6 @@ public class CombatRegulator implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerDeath(final PlayerDeathEvent event) {
         if (SpawnHandler.getSecondPlayer() == null) {
-            if (SpawnHandler.getFirstPlayer() != null) {
-                SpawnHandler.getFirstPlayer().teleport(SpawnPoint.getRandomPoint());
-            }
             try {
                 ArrayList<String> lines = new ArrayList<String>();
                 int score = -1;
@@ -190,13 +187,13 @@ public class CombatRegulator implements Listener {
         }, 0L, 20L);
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
-    public void onPlayerQuit(PlayerQuitEvent event) {
-        if (SpawnHandler.getSecondPlayer() == null) {
-            isActive = false;
-        }
-        if (SpawnHandler.getFirstPlayer() != null && SpawnPoint.getRandomPoint() != null) {
-            SpawnHandler.getFirstPlayer().teleport(SpawnPoint.getRandomPoint());
-        }
-    }
+//    @EventHandler(priority = EventPriority.HIGH)
+//    public void onPlayerQuit(PlayerQuitEvent event) {
+//        if (SpawnHandler.getSecondPlayer() == null) {
+//            isActive = false;
+//        }
+//        if (SpawnHandler.getFirstPlayer() != null && SpawnPoint.getRandomPoint() != null) {
+//            SpawnHandler.getFirstPlayer().teleport(SpawnPoint.getRandomPoint());
+//        }
+//    }
 }

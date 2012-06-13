@@ -56,7 +56,7 @@ public class SpawnHandler implements Listener {
     @EventHandler
     public void onPlayerLogin(final PlayerLoginEvent event) {
         playerOrder.add(event.getPlayer());
-        if (SpawnPoint.getRandomPoint() != null) {
+        if (!SpawnPoint.getFullList().isEmpty()) {
             event.getPlayer().getServer().getScheduler().scheduleAsyncDelayedTask(Gladiator.getPlugin(), new Runnable() {
 
                 public void run() {
