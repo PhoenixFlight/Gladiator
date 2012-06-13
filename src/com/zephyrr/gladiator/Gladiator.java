@@ -44,7 +44,7 @@ public class Gladiator extends JavaPlugin {
                         Gladiator.getPlugin().getServer().broadcastMessage(ChatColor.GREEN + "" + ticks + " seconds until the first match begins!");
                     } else Gladiator.getPlugin().getServer().getScheduler().cancelTasks(Gladiator.getPlugin());
                     if(ticks == 0) {
-                        Gladiator.getPlugin().getServer().broadcastMessage(ChatColor.GREEN + "Begin!");
+                        Gladiator.getPlugin().getServer().broadcastMessage(ChatColor.GREEN + SpawnHandler.getFirstPlayer().getDisplayName() + " and " + SpawnHandler.getSecondPlayer() + "! Begin!");
                         CombatRegulator.setActive(true);
                     }
                     ticks--;
