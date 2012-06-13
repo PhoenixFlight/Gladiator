@@ -78,6 +78,7 @@ public class SpawnPoint {
         while(spawnList.get(index).getOccupants() > SpawnHandler.playerCount() / spawnList.size())
             index = (int)(Math.random() * spawnList.size());
         //spawnCount++;
+        spawnList.get(index).addOccupant();
         return spawnList.get(index).getLoc();
     }
 
