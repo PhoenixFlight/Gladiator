@@ -125,6 +125,8 @@ public class CombatRegulator implements Listener {
                 fos.close();
                 event.getEntity().getServer().broadcastMessage(ChatColor.GREEN + SpawnHandler.getFirstPlayer().getDisplayName() + " has won " + score + " time(s)");
                 SpawnHandler.removePlayer(SpawnHandler.getFirstPlayer());
+                for(SpawnPoint point : SpawnPoint.getFullList())
+                    point.resetOccupants();
                 for (World w : event.getEntity().getServer().getWorlds()) {
                     for (Player p : w.getPlayers()) {
                         p.getInventory().clear();

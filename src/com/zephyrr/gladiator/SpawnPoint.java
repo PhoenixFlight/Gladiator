@@ -98,6 +98,9 @@ public class SpawnPoint {
     public Location getLoc() {
         return loc;
     }
+    public void resetOccupants() {
+        occs = 0;
+    }
     public int getOccupants() {
         return occs;
     }
