@@ -78,7 +78,7 @@ public class SpawnHandler implements Listener {
         if (data.equalsIgnoreCase("rien")) {
             loc = SpawnPoint.getRandomPoint();
         } else {
-            loc = new Location(event.getEntity().getServer().getWorld(data.split(",")[0]), Double.parseDouble(data.split(",")[1]), Double.parseDouble(data.split(",")[2]), Double.parseDouble(data.split(",")[3]));
+            loc = new Location(event.getEntity().getServer().getWorld(data.split(" ")[0]), Double.parseDouble(data.split(" ")[1]), Double.parseDouble(data.split(" ")[2]), Double.parseDouble(data.split(" ")[3]));
         }
         event.getEntity().teleport(loc);
         playerOrder.remove(event.getEntity());
