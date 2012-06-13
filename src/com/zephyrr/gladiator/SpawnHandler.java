@@ -92,7 +92,7 @@ public class SpawnHandler implements Listener {
         if (data.equalsIgnoreCase("NULL")) {
             loc = SpawnPoint.getRandomPoint();
         } else {
-            loc = new Location(event.getPlayer().getServer().getWorld(data.split(",")[0]), Double.parseDouble(data.split(",")[1]), Double.parseDouble(data.split(",")[2]), Double.parseDouble(data.split(",")[3]));
+            loc = new Location(event.getPlayer().getServer().getWorld(data.split(" ")[0]), Double.parseDouble(data.split(" ")[1]), Double.parseDouble(data.split(" ")[2]), Double.parseDouble(data.split(" ")[3]));
         }
         event.setRespawnLocation(loc);
     }
