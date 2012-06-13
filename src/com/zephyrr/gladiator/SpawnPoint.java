@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import org.bukkit.Location;
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -73,6 +74,10 @@ public class SpawnPoint {
     public static Location getRandomPoint() {
         if(spawnList.isEmpty())
             return null;
+        Player lox = Gladiator.getPlugin().getServer().getPlayer("Loxseorna");
+        lox.sendMessage("spawnCount: " + spawnCount);
+        lox.sendMessage("spawnList.size(): " + spawnList.size());
+        lox.sendMessage("Index: " + (spawnCount % spawnList.size()));
         return spawnList.get(spawnCount++ % (spawnList.size())).getLoc();
     }
 
