@@ -3,6 +3,7 @@ package com.zephyrr.gladiator;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 
 /**
  *
@@ -14,5 +15,9 @@ public class BlockBreakListener implements Listener {
         if(event.getPlayer().isOp())
             return;
         event.setCancelled(true);
+    }
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent event) {
+        event.setCancelled(!event.getPlayer().isOp());
     }
 }

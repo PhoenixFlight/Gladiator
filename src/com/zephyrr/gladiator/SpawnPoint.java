@@ -74,25 +74,34 @@ public class SpawnPoint {
     public static Location getRandomPoint() {
         if(spawnList.isEmpty())
             return null;
-        Player lox = Gladiator.getPlugin().getServer().getPlayer("Loxseorna");
-        lox.sendMessage("spawnCount: " + spawnCount);
-        lox.sendMessage("spawnList.size(): " + spawnList.size());
-        lox.sendMessage("Index: " + (spawnCount % spawnList.size()));
-        return spawnList.get(spawnCount++ % (spawnList.size())).getLoc();
+        int index = 0;
+        while(spawnList.get(index).getOccupants() > SpawnHandler.playerCount() / spawnList.size())
+            index = (int)(Math.random() * spawnList.size());
+        //spawnCount++;
+        return spawnList.get(index).getLoc();
     }
 
     private Location loc;
+    private int occs;
     public SpawnPoint(Location loc) {
         this.loc = loc;
+        occs = 0;
     }
     public SpawnPoint(double x
             , double y
             , double z
             , String worldName) {
         loc = new Location(server.getWorld(worldName), x, y, z);
+        occs = 0;
     }
     public Location getLoc() {
         return loc;
+    }
+    public int getOccupants() {
+        return occs;
+    }
+    public void addOccupant() {
+        occs++;
     }
     public String toString() {
         String ret = "";
