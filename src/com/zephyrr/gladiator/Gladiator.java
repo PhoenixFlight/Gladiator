@@ -130,8 +130,8 @@ public class Gladiator extends JavaPlugin {
                 Location loc = ((Player)sender).getLocation();
                 getConfig().set("respawnLocation"
                        , loc.getWorld().getName() +
-                         loc.getX() +
-                         loc.getY() +
+                         loc.getX() + " " +
+                         loc.getY() + " " + 
                          loc.getZ());
                 saveConfig();
                 return true;
